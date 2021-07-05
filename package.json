@@ -6,6 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "lint-staged": {
+    "*.js": [
+      "standard --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kelwinap/clean-node-api.git"
@@ -17,6 +28,8 @@
   },
   "homepage": "https://github.com/kelwinap/clean-node-api#readme",
   "devDependencies": {
+    "husky": "^7.0.0",
+    "lint-staged": "^11.0.0",
     "standard": "^16.0.3"
   }
 }
