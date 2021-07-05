@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/kelwinap/clean-node-api/issues"
   },
-  "homepage": "https://github.com/kelwinap/clean-node-api#readme"
+  "homepage": "https://github.com/kelwinap/clean-node-api#readme",
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
 }
