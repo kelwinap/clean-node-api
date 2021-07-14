@@ -1,6 +1,7 @@
 {
     "*.js": [
         "standard --fix",
+        "npm run jest:staged",
         "git add"
     ]
 }

@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:staged": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kelwinap/clean-node-api.git"
   },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "author": "",
   "license": "ISC",
