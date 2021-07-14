@@ -2,7 +2,7 @@ class LoginRouter {
   route (httpResponse) {
     if (!httpResponse.body.email) {
       return {
-        statusCode: 300
+        statusCode: 400
       }
     }
   }
