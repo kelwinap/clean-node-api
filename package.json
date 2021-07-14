@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kelwinap/clean-node-api.git"
   },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +23,7 @@
   },
   "homepage": "https://github.com/kelwinap/clean-node-api#readme",
   "devDependencies": {
-    "husky": "^7.0.0",
+    "husky": "^7.0.1",
     "jest": "^27.0.6",
     "lint-staged": "^11.0.0",
     "standard": "^16.0.3"
