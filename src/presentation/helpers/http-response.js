@@ -1,4 +1,4 @@
-const UnauthorizedError = require('../errors/unauthorized-error')
+const { UnauthorizedError } = require('../errors')
 module.exports = class HttpResponse {
   static ok (acessToken) {
     return {
