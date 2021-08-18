@@ -33,8 +33,10 @@
     "standard": "^16.0.3"
   },
   "dependencies": {
+    "@shelf/jest-mongodb": "^2.0.1",
     "bcrypt": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.1.0",
     "validator": "^13.6.0"
   }
 }
