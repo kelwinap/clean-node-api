@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --silent --verbose",
+    "test": "jest --watchAll --verbose false",
     "test:unit": "npm test -- --watchAll -c jest-unit-config.js",
     "test:integration": "npm test -- --watchAll -c jest-integration-config.js",
     "test:staged": "jest --passWithNoTests --silent",

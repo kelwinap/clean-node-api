@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 const { MissingParamError } = require('../../utils/errors')
 
 let connection
@@ -15,7 +15,18 @@ class LoadUserByEmailRepository {
       throw new MissingParamError('email')
     }
 
-    const user = await this.userModel.findOne({ email })
+    if (!this.userModel) {
+      throw new MissingParamError('userModel')
+    }
+
+    const user = await this.userModel.findOne({
+      email
+    },
+    {
+      projection: {
+        password: 1
+      }
+    })
 
     if (!user) return null
 
@@ -53,16 +64,30 @@ describe('LoadUserByEmailRepository', () => {
 
   test('should return an user if user is found', async () => {
     const sut = makeSut()
-    await userModel.insertOne({
-      email: 'valid_email@mail.com'
+    const fakeUser = await userModel.insertOne({
+      email: 'valid_email@mail.com',
+      name: 'any_name',
+      age: 50,
+      state: 'any_state',
+      password: 'hashed_password'
     })
+    const createdUser = await userModel.findOne({ _id: ObjectId(fakeUser.insertedId) })
     const user = await sut.load('valid_email@mail.com')
-    expect(user.email).toBe('valid_email@mail.com')
+    expect(user).toEqual({
+      _id: createdUser._id,
+      password: createdUser.password
+    })
   })
 
-  test('should return error if no email is provided', () => {
-    const sut = new LoadUserByEmailRepository()
+  test('should throw if no email is provided', () => {
+    const sut = makeSut()
     const promise = sut.load()
     expect(promise).rejects.toThrow(new MissingParamError('email'))
+  })
+
+  test('should throw if no email is provided', () => {
+    const sut = new LoadUserByEmailRepository()
+    const promise = sut.load('valid_email@mail.com')
+    expect(promise).rejects.toThrow(new MissingParamError('userModel'))
   })
 })
