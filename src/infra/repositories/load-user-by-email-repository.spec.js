@@ -1,8 +1,8 @@
-const { MongoClient, ObjectId } = require('mongodb')
+const { ObjectId } = require('mongodb')
 const { MissingParamError } = require('../../utils/errors')
+const MongoHelper = require('../helpers/mongo-helper')
 const LoadUserByEmailRepository = require('./load-user-by-email-repository')
 
-let connection
 let db
 let userModel
 
@@ -14,11 +14,8 @@ const makeSut = () => {
 
 describe('LoadUserByEmailRepository', () => {
   beforeAll(async () => {
-    connection = await MongoClient.connect(process.env.MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    })
-    db = await connection.db()
+    await MongoHelper.connect(process.env.MONGO_URL)
+    db = await MongoHelper.getDb()
   })
 
   beforeEach(async () => {
@@ -26,7 +23,7 @@ describe('LoadUserByEmailRepository', () => {
   })
 
   afterAll(async () => {
-    await connection.close()
+    await MongoHelper.disconnect()
   })
   test('should return if no user is found', async () => {
     const sut = makeSut()
