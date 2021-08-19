@@ -1,6 +1,10 @@
 const { MongoClient } = require('mongodb')
 const { MissingParamError } = require('../../utils/errors')
 
+let connection
+let db
+let userModel
+
 class LoadUserByEmailRepository {
   constructor (userModel) {
     this.userModel = userModel
@@ -19,18 +23,19 @@ class LoadUserByEmailRepository {
   }
 }
 
-describe('LoadUserByEmailRepository', () => {
-  let connection
-  let db
-  let userModel
+const makeSut = () => {
+  userModel = db.collection('users')
+  const sut = new LoadUserByEmailRepository(userModel)
+  return sut
+}
 
+describe('LoadUserByEmailRepository', () => {
   beforeAll(async () => {
     connection = await MongoClient.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
     db = await connection.db()
-    userModel = db.collection('users')
   })
 
   beforeEach(async () => {
@@ -41,13 +46,13 @@ describe('LoadUserByEmailRepository', () => {
     await connection.close()
   })
   test('should return if no user is found', async () => {
-    const sut = new LoadUserByEmailRepository(userModel)
+    const sut = makeSut()
     const user = await sut.load('invalid_email@mail.com')
     expect(user).toBeNull()
   })
 
   test('should return an user if user is found', async () => {
-    const sut = new LoadUserByEmailRepository(userModel)
+    const sut = makeSut()
     await userModel.insertOne({
       email: 'valid_email@mail.com'
     })
