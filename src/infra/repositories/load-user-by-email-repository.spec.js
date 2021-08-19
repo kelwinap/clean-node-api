@@ -1,38 +1,10 @@
 const { MongoClient, ObjectId } = require('mongodb')
 const { MissingParamError } = require('../../utils/errors')
+const LoadUserByEmailRepository = require('./load-user-by-email-repository')
 
 let connection
 let db
 let userModel
-
-class LoadUserByEmailRepository {
-  constructor (userModel) {
-    this.userModel = userModel
-  }
-
-  async load (email) {
-    if (!email) {
-      throw new MissingParamError('email')
-    }
-
-    if (!this.userModel) {
-      throw new MissingParamError('userModel')
-    }
-
-    const user = await this.userModel.findOne({
-      email
-    },
-    {
-      projection: {
-        password: 1
-      }
-    })
-
-    if (!user) return null
-
-    return user
-  }
-}
 
 const makeSut = () => {
   userModel = db.collection('users')
