@@ -9,7 +9,7 @@
     "test:unit": "npm test -- --watchAll -c jest-unit-config.js",
     "test:integration": "npm test -- --watchAll -c jest-integration-config.js",
     "test:staged": "jest --passWithNoTests --silent --runInBand --forceExit",
-    "test:ci": "jest --coverage --noStackTrace --silent",
+    "test:ci": "jest --coverage --noStackTrace --silent --runInBand --forceExit",
     "prepare": "husky install"
   },
   "repository": {
