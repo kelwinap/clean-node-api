@@ -3,8 +3,10 @@ const { MissingParamError } = require('../../utils/errors')
 const UpdateAccessTokenRepository = require('./update-access-token-repository')
 
 let db
+let userModel
 
-const makeSut = (userModel) => {
+const makeSut = () => {
+  userModel = db.collection('users')
   const sut = new UpdateAccessTokenRepository(userModel)
 
   return sut
@@ -24,22 +26,20 @@ describe('UpdateAcessTokenRepository', () => {
     await db.collection('users').deleteMany()
     await MongoHelper.disconnect()
   })
-  // test('should update the user with the given access token ', async () => {
-  //   const sut = makeSut(userModel)
+  test('should update the user with the given access token ', async () => {
+    const sut = makeSut(userModel)
 
-  //   userModel.insertOne({
-  //     email: 'valid_email@mail.com',
-  //     name: 'any_name',
-  //     age: 50,
-  //     state: 'any_state',
-  //     password: 'hashed_password'
-  //   }).then((response) => {
-  //     sut.update(response.insertedId, 'valid_token')
-  //   })
-
-  //   const test = await userModel.findOne({ email: 'valid_email@mail.com' })
-  //   expect(test.accessToken).toBe('valid_token')
-  // })
+    const fakeUser = await userModel.insertOne({
+      email: 'valid_email@mail.com',
+      name: 'any_name',
+      age: 50,
+      state: 'any_state',
+      password: 'hashed_password'
+    })
+    await sut.update(fakeUser.insertedId, 'valid_token')
+    const updatedUser = await userModel.findOne({ email: 'valid_email@mail.com' })
+    expect(updatedUser.accessToken).toBe('valid_token')
+  })
 
   test('should throw if no userId is provided', () => {
     const sut = makeSut()

@@ -5,7 +5,7 @@
   "main": "src/main/index.js",
   "scripts": {
     "start": "node src/main/index.js",
-    "test": "jest --watchAll --verbose false",
+    "test": "jest --watchAll --verbose false --detectOpenHandles --forceExit",
     "test:unit": "npm test -- --watchAll -c jest-unit-config.js",
     "test:integration": "npm test -- --watchAll -c jest-integration-config.js",
     "test:staged": "jest --passWithNoTests --silent",
