@@ -1,11 +1,12 @@
 const LoginRouter = require('./login-router')
 const { UnauthorizedError } = require('../errors')
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
+const { ServerError } = require('../helpers/http-response')
 
 const makeSut = () => {
   const authUseCaseSpy = makeAuthUseCaseSpy()
   const emailValidatorSpy = makeEmailValidator()
-  const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy)
+  const sut = new LoginRouter({ authUseCase: authUseCaseSpy, emailValidator: emailValidatorSpy })
 
   return {
     sut, authUseCaseSpy, emailValidatorSpy
@@ -229,5 +230,29 @@ describe('Login router', () => {
     }
     await sut.route(httpRequest)
     expect(emailValidatorSpy.email).toBe(httpRequest.body.email)
+  })
+
+  test('should throw if no dependency are provided', async () => {
+    const invalid = {}
+    const suts = [].concat(
+      new LoginRouter(),
+      new LoginRouter({ }),
+      new LoginRouter({ authUseCase: invalid }),
+      new LoginRouter({ authUseCase: makeAuthUseCaseSpy(), emailValidator: null }),
+      new LoginRouter({ authUseCase: makeAuthUseCaseSpy(), emailValidator: invalid })
+    )
+
+    const httpRequest = {
+      body: {
+        email: 'any_email@email.com',
+        password: 'any_password'
+      }
+    }
+
+    for (const sut of suts) {
+      const httpResponse = await sut.route(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toBe(ServerError)
+    }
   })
 })

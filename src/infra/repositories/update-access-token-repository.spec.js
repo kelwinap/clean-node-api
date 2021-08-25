@@ -6,8 +6,7 @@ let db
 let userModel
 
 const makeSut = () => {
-  userModel = db.collection('users')
-  const sut = new UpdateAccessTokenRepository(userModel)
+  const sut = new UpdateAccessTokenRepository()
 
   return sut
 }
@@ -16,6 +15,7 @@ describe('UpdateAcessTokenRepository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
     db = await MongoHelper.getDb()
+    userModel = await db.collection('users')
   })
 
   beforeEach(async () => {
